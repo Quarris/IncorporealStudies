@@ -27,22 +27,34 @@ authors="Quarris" #optional
 description='''
 
 '''
-# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+# Forge
 [[dependencies.incstu]] #optional
-    # the modid of the dependency
     modId="forge" #mandatory
-    # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
-    # The version range of the dependency
     versionRange="[31,)" #mandatory
-    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
-    # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
-# Here's another dependency
+
+# Minecraft
 [[dependencies.incstu]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"
+
+# QLib
+[[dependencies.incstu]]
+    modId="qlib"
+    mandatory=true
+    versionRange="[1.15.2-0.1,)"
+    ordering="NONE"
+    side="BOTH"
+
+# Patchouli
+[[dependencies.incstu]]
+    modId="patchouli"
+    mandatory=true
+    versionRange="[1.2-34,)"
     ordering="NONE"
     side="BOTH"

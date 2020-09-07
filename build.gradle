@@ -20,18 +20,9 @@ archivesBaseName = 'incstu'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    // The mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   Snapshot are built nightly.
-    // stable_#            Stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'snapshot', version: '20200225-1.15.1'
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
+    mappings channel: 'snapshot', version: '20200514-1.15.1'
+
     runs {
         client {
             workingDirectory project.file('run')
@@ -86,13 +77,21 @@ minecraft {
 }
 
 sourceSets.main.resources {
-    srcDir 'src/generated/resources/qlib'
     srcDir 'src/generated/resources/incstu'
+}
+
+repositories {
+    maven { url 'https://maven.blamejared.com' }
+    maven {
+        url "file://" + System.getenv("local_maven")
+    }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.15.2-31.1.77'
-    compile project("..:QLib")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.15.2-1.2-34.178:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.15.2-1.2-34.178")
+    compile fg.deobf("quarris.qlib:QLib:1.15.2-0.1")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

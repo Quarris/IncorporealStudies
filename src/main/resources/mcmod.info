@@ -1,0 +1,16 @@
+[
+{
+  "modid": "incstu",
+  "name": "Incorporeal Studies",
+  "description": "The study of mind and souls.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Quarris"],
+  "credits": "Ellpeck, for the particle manager.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
