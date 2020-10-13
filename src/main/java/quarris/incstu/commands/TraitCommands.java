@@ -14,7 +14,6 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import quarris.incstu.traits.ITrait;
 import quarris.incstu.traits.ITraitHolder;
-import quarris.incstu.traits.TraitHolderCapability;
 import quarris.incstu.traits.TraitSystem;
 
 import java.util.Set;
@@ -53,8 +52,8 @@ public class TraitCommands {
                         .then(literal("remove")
                                 .then(argument("trait", ResourceLocationArgument.resourceLocation())
                                         .suggests((command, suggestions) -> {
-                                            EntityArgument.getPlayer(command, "player").getCapability(TraitHolderCapability.INSTANCE).ifPresent(cap -> {
-                                                for (ResourceLocation name : cap.activeTraitNames()) {
+                                            EntityArgument.getPlayer(command, "player").getCapability(TraitSystem.CAPABILITY).ifPresent(cap -> {
+                                                for (ResourceLocation name : cap.getActiveTraits().keySet()) {
                                                     suggestions.suggest(name.toString());
                                                 }
                                             });
@@ -77,8 +76,8 @@ public class TraitCommands {
                 .then(literal("remove")
                         .then(argument("trait", ResourceLocationArgument.resourceLocation())
                                 .suggests((command, suggestions) -> {
-                                    command.getSource().asPlayer().getCapability(TraitHolderCapability.INSTANCE).ifPresent(cap -> {
-                                        for (ResourceLocation name : cap.activeTraitNames()) {
+                                    command.getSource().asPlayer().getCapability(TraitSystem.CAPABILITY).ifPresent(cap -> {
+                                        for (ResourceLocation name : cap.getActiveTraits().keySet()) {
                                             suggestions.suggest(name.toString());
                                         }
                                     });
@@ -90,9 +89,9 @@ public class TraitCommands {
     }
 
     private static int listTraits(CommandSource source, ServerPlayerEntity player) {
-        if (player.getCapability(TraitHolderCapability.INSTANCE).isPresent()) {
-            player.getCapability(TraitHolderCapability.INSTANCE).ifPresent(cap -> {
-                Set<ResourceLocation> traitNames = cap.activeTraitNames();
+        if (player.getCapability(TraitSystem.CAPABILITY).isPresent()) {
+            player.getCapability(TraitSystem.CAPABILITY).ifPresent(cap -> {
+                Set<ResourceLocation> traitNames = cap.getActiveTraits().keySet();
                 if (traitNames.isEmpty()) {
                     source.sendFeedback(LIST_EMPTY_RESPONSE, false);
                 } else {
@@ -108,12 +107,12 @@ public class TraitCommands {
     }
 
     private static int addTrait(CommandSource source, ServerPlayerEntity player, ResourceLocation name, CompoundNBT nbt) {
-        ITrait<PlayerEntity> trait = TraitSystem.createTrait(name);
+        ITrait<PlayerEntity> trait = TraitSystem.createTrait(player, name);
 
         if (trait != null) {
             if (nbt != null)
                 trait.deserializeNBT(nbt);
-            ITraitHolder traitHolder = player.getCapability(TraitHolderCapability.INSTANCE).orElse(null);
+            ITraitHolder traitHolder = player.getCapability(TraitSystem.CAPABILITY).orElse(null);
 
             if (traitHolder != null) {
                 if (traitHolder.hasTrait(name)) {
@@ -134,7 +133,7 @@ public class TraitCommands {
 
     private static int removeTrait(CommandSource source, ServerPlayerEntity player, ResourceLocation name) {
         if (TraitSystem.isRegistered(name)) {
-            ITraitHolder traitHolder = player.getCapability(TraitHolderCapability.INSTANCE).orElse(null);
+            ITraitHolder traitHolder = player.getCapability(TraitSystem.CAPABILITY).orElse(null);
 
             if (traitHolder != null) {
                 if (!traitHolder.hasTrait(name)) {

@@ -1,10 +1,13 @@
 package quarris.incstu;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -18,8 +21,12 @@ import org.apache.logging.log4j.Logger;
 import quarris.incstu.commands.TraitCommands;
 import quarris.incstu.proxy.ClientProxy;
 import quarris.incstu.proxy.CommonProxy;
+import quarris.incstu.traits.ITraitSupplier;
 import quarris.incstu.traits.TraitSystem;
 import quarris.incstu.traits.impl.BlockReachTrait;
+import quarris.incstu.traits.impl.EnderTeleportTrait;
+
+import java.util.Collections;
 
 @Mod(IncStu.MODID)
 public class IncStu {
@@ -45,6 +52,9 @@ public class IncStu {
         MinecraftForge.EVENT_BUS.register(this);
 
         TraitSystem.registerTrait(createRes("block_reach"), BlockReachTrait::new);
+        TraitSystem.registerTrait(createRes("ender_teleport"), EnderTeleportTrait::new);
+
+        TraitSystem.registerTraitComponent(createRes("ender_teleport"), TickEvent.PlayerTickEvent.class, EnderTeleportTrait::teleport, e -> Collections.singleton(e.player));
     }
 
     @SubscribeEvent

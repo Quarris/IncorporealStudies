@@ -3,11 +3,16 @@ package quarris.incstu.traits.impl;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
+import quarris.incstu.traits.AbstractTrait;
 import quarris.incstu.traits.ITrait;
 
-public class BlockReachTrait implements ITrait<PlayerEntity> {
+public class BlockReachTrait extends AbstractTrait<PlayerEntity> {
 
     private static final AttributeModifier INCREASED_REACH = new AttributeModifier("increased_reach", 2, AttributeModifier.Operation.ADDITION);
+
+    public BlockReachTrait(PlayerEntity holder) {
+        super(holder);
+    }
 
     @Override
     public void onApplied(PlayerEntity entity) {
